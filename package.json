@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "name": "norm-php",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "yaml": "^2.2.2"
+  },
+  "scripts": {
+    "build:tailwindcss": "tailwindcss build public/css/app.css -o public/css/style.css"
+  },
+  "author": "dinith kumudika",
+  "license": "ISC",
+  "description": ""
+}
