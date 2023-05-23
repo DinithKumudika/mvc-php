@@ -3,14 +3,12 @@
 namespace App\Core;
 
 class Response {
-     const NOT_FOUND = 404;
-     const FORBIDDEN = 403;
-
      protected array $data;
-     
-     public function __construct($data)
+
+
+     public function setStatusCode(int $code): void
      {
-          $this->data = $data;
+          http_response_code($code);
      }
 
      public function toAssoc()

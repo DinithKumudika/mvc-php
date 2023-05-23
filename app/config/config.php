@@ -9,10 +9,11 @@ return [
           'app_root' => dirname(__FILE__, 2),
           'base_path' => dirname(__FILE__, 3),
           'url_root' => 'http://localhost/mvc-template',
+          'debug' => true
      ],
 
      'database' => [
-          'conn' => 'mysql',
+          'driver' => 'mysql',
           'charset' => 'utf8mb4',
           'host' => 'localhost',
           'user' => 'root',

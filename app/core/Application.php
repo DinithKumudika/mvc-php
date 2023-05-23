@@ -7,34 +7,37 @@ use App\Core\Container;
 
 class Application {
 
+     public static string $ROOT_DIR;
      protected static Container $container;
      protected static Router $router;
      protected static Request $request;
+     public static Response $response;
 
-
-     public static function init(): void 
+     public static function init($rootPath): void 
      {
-          static::$request = new Request();
-          static::$router = new Router(static::$request);
-          static::$container = new Container();
+          self::$ROOT_DIR = $rootPath;
+          self::$request = new Request();
+          self::$response =  new Response();
+          self::$router = new Router(static::$request, static::$response);
+          self::$container = new Container();
      }
 
      public static function router(){
-          return static::$router;
+          return self::$router;
      }
 
      public static function bind(string $service, callable $resolver): void
      {
-          static::$container->bind($service, $resolver);
+          self::$container->bind($service, $resolver);
      }
 
      public static function resolve(string $service): void
      {
-          static::$container->resolve($service);
+          self::$container->resolve($service);
      }
 
      public static function run(): void
      {
-          echo static::$router->resolve();
+          echo self::$router->resolve();
      }
 }

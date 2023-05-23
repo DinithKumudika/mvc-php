@@ -5,14 +5,25 @@ namespace App\Core;
 class Router
 {
      public Request $request;
+     public Response $response;
 
-     // add your routes to this array
+     /**
+      * returns an array of routes from routing table
+      * @var array
+      */
      protected array $routes = [];
 
+     /**
+      * returns an array of route parameters
+      * @var array
+      */
+     protected array $params = [];
 
-     public function __construct(Request $request)
+
+     public function __construct(Request $request, Response $response)
      {
           $this->request = $request;
+          $this->response = $response;
      }
 
      public function resolve()
@@ -33,7 +44,10 @@ class Router
                     $action = $route['action'] ?? false;
 
                     if($action == false){
-                         throw \App\Exceptions\RouteException::notFound();
+                         $this->response->setStatusCode(404);
+                         //TODO: change later
+                         return $this->renderView('_404');
+                         //throw \App\Exceptions\RouteException::notFound();
                     }
 
                     if(is_string($action)){
@@ -45,6 +59,34 @@ class Router
           }
      }
 
+     public function renderView(string $view, array $params =[])
+     {
+          $layoutContent = $this->layout();
+          $viewContent = $this->onlyView($view, $params);
+          return str_replace('{{body}}', $viewContent, $layoutContent);
+     }
+
+     protected function layout(){
+          ob_start();
+          include_once Application::$ROOT_DIR . "/views/layouts/main.php";
+          return ob_get_clean();
+     }
+
+     protected function onlyView($view, array $params)
+     {
+          ob_start();
+          include_once Application::$ROOT_DIR . "/views/$view.view.php";
+          return ob_get_clean();
+     }
+
+     /**
+      * Add a route to the routing table
+      *
+      * @param string $uri
+      * @param callable $callback
+      * @param string $method
+      * @return Router
+      */
      private function add(string $uri, callable $callback, string $method): Router
      {
           $this->routes[] = [
@@ -57,57 +99,49 @@ class Router
           return $this;
      }
 
+     /**
+      * Add a route as a get route
+      */
      public function get(string $uri, callable $callback): Router
      {
           return $this->add($uri, $callback, 'GET');
      }
 
+     /**
+      * Add a route as a post route
+      */
      public function post(string $uri, callable $callback): Router
      {
           return $this->add($uri, $callback, 'POST');
      }
 
+     /**
+      * Add a route as a delete route
+      */
      public function delete(string $uri, callable $callback): Router
      {
           return $this->add($uri, $callback, 'DELETE');
      }
 
+     /**
+      * Add a route as a patch route
+      */
      public function patch(string $uri, callable $callback): Router
      {
           return $this->add($uri, $callback, 'PATCH');
      }
 
+     /**
+      * declare middleware associated with the route
+      */
      public function only(string $key)
      {
           $this->routes[array_key_last($this->routes)]['middleware'] = $key;
      }
 
-     public function renderView(string $view)
-     {
-          $layout = $this->layout();
-          include_once APP_ROOT . "/views/$view.view.php";
-     }
-
-     protected function layout(){
-
-     }
-
-     protected static function abort(int $status_code = null)
-     {
-          switch ($status_code) {
-               case 404:
-                    http_response_code(404);
-                    require APP_ROOT . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . '404.view.php';
-                    break;
-               case 403:
-                    http_response_code(403);
-                    require APP_ROOT . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . '403.view.php';
-                    break;
-          }
-
-          die();
-     }
-
+     /**
+      * get all registered routes in the router
+      */
      public function getRoutes(): array
      {
           return $this->routes;

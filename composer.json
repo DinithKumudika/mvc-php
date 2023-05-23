@@ -1,13 +1,26 @@
 {
     "name": "dinith/norm-php",
+    "description": "a simple PHP framework based on MVC for building web applications",
+    "keywords": ["framework", "php", "mvc"],
     "license": "MIT",
     "authors": [
         {
             "name": "DinithKumudika",
-            "email": "dinithwalpitagama@gmail.com"
+            "email": "dinithwalpitagama@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
+        "ext-pdo": "*",
+        "ext-mbstring": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
         "phpmailer/phpmailer": "^6.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
     }
 }

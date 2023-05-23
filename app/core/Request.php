@@ -16,7 +16,7 @@ class Request {
      public function getPath(): string
      {
           //$path = $_SERVER['REQUEST_URI'] ?? '/';
-          $path = explode(\APP_NAME, $_SERVER['REQUEST_URI'])[1];
+          $path = explode(APP_NAME, $_SERVER['REQUEST_URI'])[1];
           $pos = strpos($path, '?');
           if($pos == false){
                return $path;

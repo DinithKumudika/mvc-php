@@ -15,7 +15,7 @@ Class Database {
      {
           try {
 
-               $dsn = "{$config['conn']}:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
+               $dsn = "{$config['driver']}:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
 
                $options = [
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,

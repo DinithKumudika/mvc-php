@@ -12,7 +12,7 @@
     "yaml": "^2.2.2"
   },
   "scripts": {
-    "build:tailwindcss": "tailwindcss build public/css/app.css -o public/css/style.css"
+    "build:tailwindcss": "tailwindcss build ./public/assets/css/app.css -o ./public/assets/css/style.css"
   },
   "author": "dinith kumudika",
   "license": "ISC",
